@@ -99,7 +99,7 @@ public class SpringBoot01HelloworldQuickApplicationTests {
             entities.add(entity);
 
             // Print the entity
-            System.out.println(entity);
+//            System.out.println(entity);
 
         }
 
