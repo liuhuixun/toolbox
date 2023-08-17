@@ -119,9 +119,134 @@ public class SpringBoot01HelloworldQuickApplicationTests {
         ExcelLogs logs = new ExcelLogs();
         Collection<Map> importExcel = ExcelUtil.importExcel(Map.class, inputStream, "yyyy/MM/dd HH:mm:ss", logs, 0);
 
+        List<LyKyXtglDmkCl> bigEntities = new ArrayList<>();
+        List<LyKyXtglDmkCl> middleEntities = new ArrayList<>();
+        List<LyKyXtglDmkCl> smallEntities = new ArrayList<>();
+
+        String bigFlid = "d1dab0d4-a80d-4451-9552-0daa160abdad";
+        String middleFlid = "74086358-b2b9-4b46-9b1b-707738ac30d6";
+        String smallFlid = "93ac39a0-7448-4fde-99f0-511da89dc7e3";
+
+        int bigIndex = 1;
+        int middleIndex = 1;
+        int smallIndex = 1;
+
+        String bigSign = "BIG_NATIONAL_ECONOMY";
+        String middleSign = "MEDIUM_NATIONAL_ECONOMY";
+        String smallSign = "SMALL_NATIONAL_ECONOMY";
+
         for (Map m : importExcel) {
-            System.out.println(m);
+
+            String big = (m.get("大类 ") + "").trim();
+            String middle = (m.get("中类 ") + "").trim();
+            String small = (m.get("小类 ") + "").trim();
+            String name = (m.get("类 别 名 称 ") + "").trim();
+
+            if (!big.isEmpty()) {
+                LyKyXtglDmkCl entity = new LyKyXtglDmkCl();
+                entity.setFlid(bigFlid);
+                entity.setDm(big);
+                entity.setMc(name);
+                entity.setJc(name);
+                entity.setPxh(bigIndex++);
+                entity.setZt("1");
+                entity.setDmbz(bigSign);
+
+                bigEntities.add(entity);
+
+                continue;
+            }
+
+            if (!middle.isEmpty() && !small.isEmpty()) {
+                LyKyXtglDmkCl middleEntity = new LyKyXtglDmkCl();
+                middleEntity.setFlid(middleFlid);
+                middleEntity.setDm(middle);
+                middleEntity.setMc(name);
+                middleEntity.setJc(name);
+                middleEntity.setFdm(middle.substring(0, middle.length() - 1));
+                middleEntity.setPxh(middleIndex++);
+                middleEntity.setZt("1");
+                middleEntity.setDmbz(middleSign);
+
+                middleEntities.add(middleEntity);
+
+                LyKyXtglDmkCl smallEntity = new LyKyXtglDmkCl();
+                smallEntity.setFlid(smallFlid);
+                smallEntity.setDm(small);
+                smallEntity.setMc(name);
+                smallEntity.setJc(name);
+                smallEntity.setFdm(small.substring(0, small.length() - 1));
+                smallEntity.setPxh(smallIndex++);
+                smallEntity.setZt("1");
+                smallEntity.setDmbz(smallSign);
+
+                smallEntities.add(smallEntity);
+
+                continue;
+            }
+
+            if (!middle.isEmpty()) {
+                LyKyXtglDmkCl middleEntity = new LyKyXtglDmkCl();
+                middleEntity.setFlid(middleFlid);
+                middleEntity.setDm(middle);
+                middleEntity.setMc(name);
+                middleEntity.setJc(name);
+                middleEntity.setFdm(middle.substring(0, middle.length() - 1));
+                middleEntity.setPxh(middleIndex++);
+                middleEntity.setZt("1");
+                middleEntity.setDmbz(middleSign);
+
+                middleEntities.add(middleEntity);
+
+                continue;
+            }
+
+            if (!small.isEmpty()) {
+
+                LyKyXtglDmkCl smallEntity = new LyKyXtglDmkCl();
+                smallEntity.setFlid(smallFlid);
+                smallEntity.setDm(small);
+                smallEntity.setMc(name);
+                smallEntity.setJc(name);
+                smallEntity.setFdm(small.substring(0, small.length() - 1));
+                smallEntity.setPxh(smallIndex++);
+                smallEntity.setZt("1");
+                smallEntity.setDmbz(smallSign);
+
+                smallEntities.add(smallEntity);
+
+            }
+//            System.out.println(big + "," + middle + "," + small + "," + name);
         }
+
+
+//        service.insertBatch(bigEntities);
+//        service.insertBatch(middleEntities);
+        List<List<LyKyXtglDmkCl>> lists = splitCollection(smallEntities, 300);
+        for (List<LyKyXtglDmkCl> list : lists) {
+            System.out.println(list);
+//            service.insertBatch(list);
+        }
+
+//        System.out.println(bigEntities);
+//        System.out.println(middleEntities);
+//        System.out.println(smallEntities);
+
+    }
+
+    public static <T> List<List<T>> splitCollection(List<T> collection, int chunkSize) {
+        int length = collection.size();
+        int numOfChunks = (int) Math.ceil((double) length / chunkSize);
+
+        List<List<T>> result = new ArrayList<>();
+
+        for (int i = 0; i < numOfChunks; i++) {
+            int start = i * chunkSize;
+            int end = Math.min(start + chunkSize, length);
+            result.add(collection.subList(start, end));
+        }
+
+        return result;
     }
 
 }
