@@ -228,6 +228,7 @@ public class SpringBoot01HelloworldQuickApplicationTests {
 //            service.insertBatch(list);
         }
 
+
 //        System.out.println(bigEntities);
 //        System.out.println(middleEntities);
 //        System.out.println(smallEntities);
@@ -247,6 +248,61 @@ public class SpringBoot01HelloworldQuickApplicationTests {
         }
 
         return result;
+    }
+
+    @Test
+    public void test4() throws FileNotFoundException {
+
+        File f = new File("C:\\Users\\admin\\Desktop\\代码集副本.xls");
+        InputStream inputStream = new FileInputStream(f);
+
+        ExcelLogs logs = new ExcelLogs();
+        Collection<Map> importExcel = ExcelUtil.importExcel(Map.class, inputStream, "yyyy/MM/dd HH:mm:ss", logs, 0);
+        List<LyKyXtglDmkCl> firstEntities = new ArrayList<>();
+        List<LyKyXtglDmkCl> secondEntities = new ArrayList<>();
+        String firstFlid = "2f6de6bf42684b0b817adeb4c959c071";
+        String secondFlid = "ee1abf0a053b445fb2c720ade9866810";
+        String firstSign = "RESEARCH_TITLE_FIRST_LEVEL";
+        String secondSign = "RESEARCH_TITLE_SECOND_LEVEL";
+        System.out.println("一共有" + importExcel.size() + "条数据");
+        int firstIndex = 1;
+        int secondIndex = 1;
+
+        for (Map m : importExcel) {
+//            System.out.println(m);
+            LyKyXtglDmkCl entity = new LyKyXtglDmkCl();
+            entity.setDm(m.get("代码") + "");
+            entity.setMc(m.get("名称") + "");
+            entity.setJc(m.get("名称") + "");
+            entity.setZt("1");
+
+            String fdm = m.get("父级节点ID") + "";
+            if ("无".equals(fdm)) {
+                entity.setDmbz(firstSign);
+                entity.setFlid(firstFlid);
+                entity.setPxh(firstIndex++);
+                firstEntities.add(entity);
+            } else {
+                entity.setFdm(fdm);
+                entity.setFlid(secondFlid);
+                entity.setDmbz(secondSign);
+                entity.setPxh(secondIndex++);
+                secondEntities.add(entity);
+            }
+//            System.out.println(entity);
+        }
+
+        System.out.println("一级一共有" + firstEntities.size() + "条数据");
+        System.out.println("二级一共有" + secondEntities.size() + "条数据");
+        System.out.println("一级最大排序号" + firstIndex);
+        System.out.println("二级最大排序号" + secondIndex);
+
+//        if(firstEntities.size() > 0){
+//            service.insertBatch(firstEntities);
+//        }
+//        if(secondEntities.size() > 0){
+//            service.insertBatch(secondEntities);
+//        }
     }
 
 }
