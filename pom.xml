@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.atguigu</groupId>
-    <artifactId>spring-boot-01-helloworld-quick</artifactId>
+    <artifactId>import-data-from-excel</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>spring-boot-01-helloworld-quick</name>
+    <name>import-data-from-excel</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>1.8</java.version>
